@@ -20,7 +20,7 @@ const PROJECTS_DATA = [
     solution: "Developed an autonomous robot that measures soil moisture and environmental conditions for precision agriculture using automated sensing logic.",
     role: "Sensor calibration, logic development, embedded programming, and hardware assembly.",
     outcome: "Functional prototype for automated soil analysis; demonstrates precision agriculture concept.",
-    image: "/src/assets/projects/iot_agriculture_robot_mockup_1775811545492.png",
+    image: "/projects/iot_agriculture_robot_mockup_1775811545492.png",
     tags: ["Arduino", "IoT", "Sensors", "Agriculture"]
   },
   {
@@ -29,7 +29,7 @@ const PROJECTS_DATA = [
     solution: "Built a system capturing EMG signals to analyze muscle activity and detect fatigue levels dynamically.",
     role: "Signal acquisition, calibration, and firmware development for real-time analysis.",
     outcome: "Working prototype useful for physiotherapy and sports training applications.",
-    image: "/src/assets/projects/emg_muscle_detection_v2_1775817717934.png",
+    image: "/projects/emg_muscle_detection_v2_1775817717934.png",
     tags: ["EMG", "ESP32", "Signal Processing", "Medical Tech"]
   },
   {
@@ -38,7 +38,7 @@ const PROJECTS_DATA = [
     solution: "AI-powered assistant that analyzes syllabuses and generates optimized, personalized study schedules.",
     role: "System architecture, syllabus analysis algorithm, and adaptive plan generation logic.",
     outcome: "Automated planning system that improves study efficiency and consistency.",
-    image: "/src/assets/projects/studyflow_ai_v2_1775817736464.png",
+    image: "/projects/studyflow_ai_v2_1775817736464.png",
     tags: ["Python", "AI", "Education", "Automation"],
     github: "https://github.com/dileepwork/studyflow_ai2.0.git"
   },
@@ -48,7 +48,7 @@ const PROJECTS_DATA = [
     solution: "Multi-user system with live GPS tracking, route management, and ETA notifications for students and drivers.",
     role: "Multi-app ecosystem architecture, tracking logic, and backend integration.",
     outcome: "Improved commute transparency and centralized control for transport management.",
-    image: "/src/assets/projects/bus_tracking_v2_1775817751690.png",
+    image: "/projects/bus_tracking_v2_1775817751690.png",
     tags: ["Node.js", "Firebase", "GPS", "Fleet Management"],
     github: "https://github.com/dileepwork/project_bus.git"
   },
@@ -58,7 +58,7 @@ const PROJECTS_DATA = [
     solution: "AI WhatsApp assistant that automates communication, categorizes leads, and handles follow-ups.",
     role: "Conversation flow design, CRM logic, and WhatsApp API integration.",
     outcome: "Reduced manual effort and improved customer response times melalui automation.",
-    image: "/src/assets/projects/whatsapp_crm_v2_1775817766944.png",
+    image: "/projects/whatsapp_crm_v2_1775817766944.png",
     tags: ["WhatsApp API", "NLP", "Python", "CRM"]
   },
   {
@@ -67,7 +67,7 @@ const PROJECTS_DATA = [
     solution: "Intelligent employee management system with biometric tracking and role-based access.",
     role: "Database structure design, authentication system, and reporting features.",
     outcome: "Streamlined attendance tracking and improved organizational visibility.",
-    image: "/src/assets/projects/attendance_management_v2_1775817782969.png",
+    image: "/projects/attendance_management_v2_1775817782969.png",
     tags: ["React", "Node.js", "HR Management", "Auth"]
   },
   {
@@ -76,7 +76,7 @@ const PROJECTS_DATA = [
     solution: "Mobile app using AI to detect potholes via image capture and report road conditions with GPS tagging.",
     role: "AI detection pipeline, image processing integration, and gamified reporting logic.",
     outcome: "Enables faster road repair identification through crowdsourced data collection.",
-    image: "/src/assets/projects/roadguard_ai_v2_1775817799400.png",
+    image: "/projects/roadguard_ai_v2_1775817799400.png",
     tags: ["Computer Vision", "Firebase", "Civic Tech", "Mobile"],
     github: "https://github.com/Dhinesh71/Roadguard_ai.git"
   },
@@ -86,7 +86,7 @@ const PROJECTS_DATA = [
     solution: "AI system analyzing CCTV footage to identify accidents and alert emergency services instantly.",
     role: "End-to-end architecture, video processing pipeline, and alert triggering logic.",
     outcome: "Reduces response time in accidents; demonstrates smart-city safety solutions.",
-    image: "/src/assets/projects/visionguard_ai_accident_mockup_1775811563972.png",
+    image: "/projects/visionguard_ai_accident_mockup_1775811563972.png",
     tags: ["Computer Vision", "Python", "Smart City", "Security"],
     github: "https://github.com/dhineshdevhub/VisionGuard-AI.git"
   }
