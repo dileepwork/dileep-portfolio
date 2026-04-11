@@ -1,39 +1,9 @@
-import { motion, useSpring, useMotionValue } from 'framer-motion';
-import { ArrowRight } from 'lucide-react';
+import { motion } from 'framer-motion';
 
 const MagneticButton = ({ children, style }: any) => {
-  const x = useMotionValue(0);
-  const y = useMotionValue(0);
-
-  const springConfig = { damping: 15, stiffness: 150 };
-  const springX = useSpring(x, springConfig);
-  const springY = useSpring(y, springConfig);
-
-  const handleMouseMove = (e: any) => {
-    const { clientX, clientY, currentTarget } = e;
-    const { left, top, width, height } = currentTarget.getBoundingClientRect();
-    const centerX = left + width / 2;
-    const centerY = top + height / 2;
-    const deltaX = clientX - centerX;
-    const deltaY = clientY - centerY;
-    x.set(deltaX * 0.35);
-    y.set(deltaY * 0.35);
-  };
-
-  const handleMouseLeave = () => {
-    x.set(0);
-    y.set(0);
-  };
-
   return (
     <motion.button
-      onMouseMove={handleMouseMove}
-      onMouseLeave={handleMouseLeave}
-      style={{
-        ...style,
-        x: springX,
-        y: springY,
-      }}
+      style={style}
       whileHover={{ scale: 1.05 }}
       whileTap={{ scale: 0.95 }}
     >

@@ -1,6 +1,6 @@
 import { useEffect, useRef } from 'react';
 import Lenis from 'lenis';
-import { useScroll, useTransform, motion, useSpring } from 'framer-motion';
+import { motion } from 'framer-motion';
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import PanoramicProjects from './components/PanoramicProjects';

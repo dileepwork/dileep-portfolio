@@ -61,7 +61,13 @@ function ParticleField() {
   return (
     <points ref={ref}>
       <bufferGeometry>
-        <bufferAttribute attach="attributes-position" count={COUNT} array={positions} itemSize={3} />
+        <bufferAttribute 
+          attach="attributes-position" 
+          count={COUNT} 
+          array={positions} 
+          itemSize={3} 
+          args={[positions, 3]}
+        />
       </bufferGeometry>
       <pointsMaterial
         color="#10b981"

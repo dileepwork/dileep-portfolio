@@ -1,11 +1,11 @@
-import { createContext, useContext, useEffect, useRef, useState } from 'react';
-import { useSpring, useMotionValue } from 'framer-motion';
+import { createContext, useContext, useEffect, ReactNode } from 'react';
+import { useSpring, useMotionValue, MotionValue } from 'framer-motion';
 
 interface MouseParallaxContextType {
-  mouseX: ReturnType<typeof useMotionValue>;
-  mouseY: ReturnType<typeof useMotionValue>;
-  smoothX: ReturnType<typeof useSpring>;
-  smoothY: ReturnType<typeof useSpring>;
+  mouseX: MotionValue<number>;
+  mouseY: MotionValue<number>;
+  smoothX: MotionValue<number>;
+  smoothY: MotionValue<number>;
 }
 
 const MouseParallaxContext = createContext<MouseParallaxContextType | null>(null);

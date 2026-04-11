@@ -1,5 +1,5 @@
 import { motion } from 'framer-motion';
-import { Cpu, CircuitBoard, Code2, BrainCircuit, Wifi, Wrench, Layers } from 'lucide-react';
+import { Cpu, Code2, BrainCircuit, Wrench } from 'lucide-react';
 
 const skillCategories = [
   {
