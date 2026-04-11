@@ -1,6 +1,10 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, CheckCircle, Mail, Phone, MapPin, Linkedin } from 'lucide-react';
+import { Send, CheckCircle, Mail, Phone, MapPin } from 'lucide-react';
+
+const LinkedinIcon = ({ size = 24 }: { size?: number }) => (
+  <svg width={size} height={size} viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M16 8a6 6 0 0 1 6 6v7h-4v-7a2 2 0 0 0-2-2 2 2 0 0 0-2 2v7h-4v-7a6 6 0 0 1 6-6z"></path><rect x="2" y="9" width="4" height="12"></rect><circle cx="4" cy="4" r="2"></circle></svg>
+);
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -119,7 +123,7 @@ const Contact = () => {
           >
             {[
               { icon: <Mail size={24} />, label: "Email", value: "dileeppvt03@gmail.com", color: "rgba(16, 185, 129, 0.1)", iconColor: "var(--primary)" },
-              { icon: <Linkedin size={24} />, label: "LinkedIn", value: "Dileep V", color: "rgba(14, 118, 168, 0.1)", iconColor: "#0A66C2", link: "https://www.linkedin.com/in/dileep-v-482035361" },
+              { icon: <LinkedinIcon size={24} />, label: "LinkedIn", value: "Dileep V", color: "rgba(14, 118, 168, 0.1)", iconColor: "#0A66C2", link: "https://www.linkedin.com/in/dileep-v-482035361" },
               { icon: <Phone size={24} />, label: "Phone", value: "+91 9159059497", color: "rgba(59, 130, 246, 0.1)", iconColor: "#3b82f6" },
               { icon: <MapPin size={24} />, label: "Location", value: "Erode, Tamil Nadu", color: "rgba(139, 92, 246, 0.1)", iconColor: "#8b5cf6" }
             ].map((item, i) => (
