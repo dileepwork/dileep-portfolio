@@ -71,7 +71,7 @@ const EndScene = () => {
         transition={{ delay: 0.5, duration: 1 }}
       >
         <a href="https://github.com/dileepwork" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', opacity: 0.5 }}><GithubIcon size={20} /></a>
-        <a href="#" style={{ color: '#fff', opacity: 0.5 }}><LinkedinIcon size={20} /></a>
+        <a href="https://www.linkedin.com/in/dileep-v-482035361" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', opacity: 0.5 }}><LinkedinIcon size={20} /></a>
         <a href="https://mail.google.com/mail/?view=cm&fs=1&to=dileeppvt03@gmail.com" target="_blank" rel="noopener noreferrer" style={{ color: '#fff', opacity: 0.5 }}><Mail size={20} /></a>
       </motion.div>
 
