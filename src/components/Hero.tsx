@@ -1,16 +1,6 @@
 import { motion } from 'framer-motion';
 
-const MagneticButton = ({ children, style }: any) => {
-  return (
-    <motion.button
-      style={style}
-      whileHover={{ scale: 1.05 }}
-      whileTap={{ scale: 0.95 }}
-    >
-      {children}
-    </motion.button>
-  );
-};
+
 
 const QuantumNetwork = () => {
   return (

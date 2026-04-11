@@ -1,4 +1,4 @@
-import { createContext, useContext, useEffect, ReactNode } from 'react';
+import { createContext, useContext, useEffect, type ReactNode } from 'react';
 import { useSpring, useMotionValue, MotionValue } from 'framer-motion';
 
 interface MouseParallaxContextType {
@@ -16,7 +16,7 @@ export const useMouseParallax = () => {
   return ctx;
 };
 
-export const MouseParallaxProvider = ({ children }: { children: React.ReactNode }) => {
+export const MouseParallaxProvider = ({ children }: { children: ReactNode }) => {
   const mouseX = useMotionValue(0);
   const mouseY = useMotionValue(0);
 
