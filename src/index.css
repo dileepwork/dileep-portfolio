@@ -1,0 +1,124 @@
+@import url('https://fonts.googleapis.com/css2?family=Space+Grotesk:wght@300;400;500;600;700;900&display=swap');
+
+:root {
+  --primary: #10b981;
+  --primary-hover: #059669;
+  --bg-dark: #030d07;
+  --surface: #081a10;
+  --surface-lighter: #0d2a18;
+  --text-main: #f0fdf4;
+  --text-dim: #d1fae5;
+  --text-secondary: #6ee7b7;
+  --glass: rgba(6, 22, 13, 0.75);
+  --glass-border: rgba(16, 185, 129, 0.22);
+  --accent-glow: rgba(16, 185, 129, 0.18);
+  --accent: #10b981;
+  --font-heading: 'Space Grotesk', sans-serif;
+  --font-body: 'Space Grotesk', sans-serif;
+}
+
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html { scroll-behavior: smooth; }
+
+body {
+  background-color: var(--bg-dark);
+  color: var(--text-main);
+  font-family: var(--font-body);
+  line-height: 1.6;
+  overflow-x: hidden;
+  -webkit-font-smoothing: antialiased;
+  cursor: none; /* Handled by custom cursor */
+}
+
+/* Native cursor hidden everywhere */
+*, *::before, *::after { cursor: none !important; }
+
+::selection {
+  background: var(--primary);
+  color: #000;
+}
+
+h1, h2, h3, h4, h5, h6 {
+  font-family: var(--font-heading);
+  letter-spacing: -0.03em;
+}
+
+a, button { text-decoration: none; color: inherit; }
+
+/* ── Hide scrollbar ── */
+::-webkit-scrollbar { width: 0; }
+* { scrollbar-width: none; }
+
+/* ── VR Glass: Highly Readable Panels ── */
+.glass {
+  background: rgba(5, 18, 11, 0.35);
+  backdrop-filter: blur(24px) saturate(180%);
+  -webkit-backdrop-filter: blur(28px) saturate(160%);
+  border: 1px solid rgba(16, 185, 129, 0.25);
+  box-shadow:
+    0 0 0 1px rgba(16,185,129,0.06),
+    0 12px 40px rgba(0,0,0,0.7),
+    inset 0 1px 0 rgba(16,185,129,0.12);
+}
+
+/* ── VR Card ── */
+.glass-card {
+  background: rgba(5, 18, 11, 0.92);
+  backdrop-filter: blur(24px);
+  -webkit-backdrop-filter: blur(24px);
+  border: 1px solid rgba(16, 185, 129, 0.18);
+  box-shadow:
+    0 0 50px rgba(16,185,129,0.07),
+    0 24px 64px rgba(0,0,0,0.85);
+  position: relative;
+  overflow: hidden;
+  transition: border-color 0.35s ease, box-shadow 0.35s ease;
+}
+
+.glass-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 1px;
+  background: linear-gradient(90deg, transparent 0%, rgba(16,185,129,0.5) 50%, transparent 100%);
+  opacity: 0;
+  transition: opacity 0.35s ease;
+}
+
+.glass-card:hover::before { opacity: 1; }
+
+.glass-card:hover {
+  border-color: rgba(16,185,129,0.4);
+  box-shadow:
+    0 0 80px rgba(16,185,129,0.12),
+    0 32px 80px rgba(0,0,0,0.9);
+}
+
+/* ── Typography helpers ── */
+.text-shadow { text-shadow: 0 2px 20px rgba(0,0,0,0.8); }
+
+.gradient-text {
+  background: linear-gradient(135deg, #10b981 0%, #34d399 50%, #6ee7b7 100%);
+  -webkit-background-clip: text;
+  -webkit-text-fill-color: transparent;
+  background-clip: text;
+  filter: drop-shadow(0 0 16px rgba(16,185,129,0.25));
+}
+
+.container {
+  max-width: 1300px;
+  margin: 0 auto;
+  padding: 0 2rem;
+}
+
+/* ── Hover utilities ── */
+.hover-scale { transition: transform 0.2s ease; }
+.hover-scale:hover { transform: scale(1.04); }
+
+.project-image { transition: transform 0.5s ease; }
+.project-image:hover { transform: scale(1.05); }
