@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { motion, AnimatePresence } from 'framer-motion';
-import { Send, CheckCircle, Mail, Phone, MapPin } from 'lucide-react';
+import { Send, CheckCircle, Mail, Phone, MapPin, Linkedin } from 'lucide-react';
 
 const Contact = () => {
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -119,10 +119,21 @@ const Contact = () => {
           >
             {[
               { icon: <Mail size={24} />, label: "Email", value: "dileeppvt03@gmail.com", color: "rgba(16, 185, 129, 0.1)", iconColor: "var(--primary)" },
+              { icon: <Linkedin size={24} />, label: "LinkedIn", value: "Dileep V", color: "rgba(14, 118, 168, 0.1)", iconColor: "#0A66C2", link: "https://www.linkedin.com/in/dileep-v-482035361" },
               { icon: <Phone size={24} />, label: "Phone", value: "+91 9159059497", color: "rgba(59, 130, 246, 0.1)", iconColor: "#3b82f6" },
               { icon: <MapPin size={24} />, label: "Location", value: "Erode, Tamil Nadu", color: "rgba(139, 92, 246, 0.1)", iconColor: "#8b5cf6" }
             ].map((item, i) => (
-              <div key={i} style={{ display: 'flex', gap: '1.25rem', alignItems: 'center' }}>
+              <div 
+                key={i} 
+                onClick={() => item.link && window.open(item.link, '_blank')}
+                style={{ 
+                  display: 'flex', 
+                  gap: '1.25rem', 
+                  alignItems: 'center',
+                  cursor: item.link ? 'pointer' : 'default',
+                  transition: 'transform 0.2s ease'
+                }}
+              >
                 <div style={{ 
                   width: '54px', 
                   height: '54px', 
