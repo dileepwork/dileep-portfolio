@@ -158,7 +158,7 @@ function App() {
 
   return (
     <MouseParallaxProvider>
-      <div className="app-container" style={{ background: 'transparent' }}>
+      <div className="app-container" style={{ background: 'transparent', position: 'relative' }}>
 
         {/* VR Environment - Stays fixed in background */}
         <VRTunnel />
