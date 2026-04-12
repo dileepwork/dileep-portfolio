@@ -290,16 +290,6 @@ const Contact = () => {
             </AnimatePresence>
           </motion.div>
         </div>
-        <footer style={{ 
-          marginTop: '6rem', 
-          borderTop: '1px solid var(--glass-border)', 
-          paddingTop: '2rem',
-          textAlign: 'center',
-          color: 'var(--text-dim)',
-          fontSize: '0.85rem'
-        }}>
-          <p>© 2026 DILEEP PORTFOLIO — ENGINEERED WITH PRECISION</p>
-        </footer>
       </div>
     </section>
   );
