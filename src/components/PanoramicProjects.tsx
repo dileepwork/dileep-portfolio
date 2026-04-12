@@ -62,7 +62,7 @@ const ProjectCardFlip = ({ project, index, scrollProgress, total }: { project: P
     <motion.div
       style={{
         position: 'absolute',
-        top: '55%',
+        top: '60%',
         left: '50%',
         x: xOffset,
         y: yOffset,
@@ -224,9 +224,9 @@ const PanoramicProjects = ({ projects }: { projects: Project[] }) => {
         <motion.div
            style={{
              position: 'absolute',
-             top: '8rem',
+             top: '4rem',
              textAlign: 'center',
-             zIndex: 5,
+             zIndex: 200,
              opacity: useTransform(smoothProgress, [0, 0.1, 0.9, 1], [0, 1, 1, 0])
            }}
         >
