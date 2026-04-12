@@ -21,17 +21,40 @@ interface Project {
 const ProjectCardFlip = ({ project, index, scrollProgress, total }: { project: Project; index: number, scrollProgress: any, total: number }) => {
   const [isFlipped, setIsFlipped] = useState(false);
   
-  // Refined horizontal spread to fit within view
-  const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
-  const spreadWidth = Math.min(viewportWidth * 0.85, total * 220); 
-  const xTarget = (index - (total - 1) / 2) * (spreadWidth / total);
+  // Project Nexus: Progressive Reveal (Linear Fan)
+  // Starts fanned out and pans through the deck
   
-  const xOffset = useTransform(scrollProgress, [0.1, 0.45 + (index * 0.03)], [0, xTarget]);
-  const yOffset = useTransform(scrollProgress, [0.1, 0.45], [0, 40]); 
-  const rotation = useSpring(useTransform(scrollProgress, [0.1, 0.5], [0, (index - (total - 1) / 2) * 1.5]), { damping: 15 });
-  const opacity = useTransform(scrollProgress, [0.1, 0.2 + (index * 0.02)], [0, 1]);
-  const scaleScroll = useTransform(scrollProgress, [0.1, 0.4], [0.8, 0.95]); // Base scale slightly smaller to fit more
+  const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
+  const cardWidth = 300;
+  const cardSpacing = 280; 
+  
+  // Base fanned position
+  const fannedX = (index - (total - 1) / 2) * cardSpacing;
+  
+  // Panning: Offset the whole deck so we can scroll through it
+  // Starts with the first card fanned on the left, pans across
+  const totalDeckRange = (total - 1) * cardSpacing;
+  const panOffset = useTransform(scrollProgress, [0, 0.85], [totalDeckRange / 2, -totalDeckRange / 2]);
+  
+  const xOffset = useTransform(panOffset, (p: any) => fannedX + p);
 
+  const yOffset = 40; 
+  const rotation = (index - (total - 1) / 2) * 2;
+  
+  // Opacity & Scale: Start visible, then fade out at the very end
+  const opacity = useTransform(
+    scrollProgress, 
+    [0, 0.85, 1.0], 
+    [1, 1, 0]
+  );
+
+  // Focus effect: Scale up when near the center of the viewport
+  const scaleFocus = useTransform(
+    xOffset,
+    [-viewportWidth / 2, 0, viewportWidth / 2],
+    [0.7, 1.05, 0.7]
+  );
+  
   const ACCENT_COLORS = ['#10b981', '#3b82f6', '#f59e0b', '#ec4899', '#8b5cf6', '#06b6d4', '#f97316', '#84cc16'];
   const accent = ACCENT_COLORS[index % ACCENT_COLORS.length];
 
@@ -47,11 +70,14 @@ const ProjectCardFlip = ({ project, index, scrollProgress, total }: { project: P
         translateY: '-50%',
         rotateZ: rotation,
         opacity,
-        scale: scaleScroll,
+        scale: scaleFocus,
         perspective: '1200px',
-        width: '300px',
+        width: `${cardWidth}px`,
         height: '400px',
-        zIndex: isFlipped ? 500 : 10 + index,
+        zIndex: useTransform(xOffset, (x: any) => {
+          if (isFlipped) return 500;
+          return Math.round(100 - Math.abs(x as number) / 10);
+        }),
       }}
       onMouseEnter={() => setIsFlipped(true)}
       onMouseLeave={() => setIsFlipped(false)}
@@ -177,9 +203,12 @@ const PanoramicProjects = ({ projects }: { projects: Project[] }) => {
   });
 
   const smoothProgress = useSpring(scrollYProgress, { damping: 20, stiffness: 100 });
+  
+  // Calculate dynamic height based on project count (min 350vh, +50vh per project beyond 8)
+  const containerHeight = Math.max(350, 200 + (projects.length * 50));
 
   return (
-    <div ref={containerRef} style={{ height: '350vh', position: 'relative' }}>
+    <div ref={containerRef} style={{ height: `${containerHeight}vh`, position: 'relative' }}>
       <div style={{
         position: 'sticky',
         top: 0,
@@ -205,7 +234,29 @@ const PanoramicProjects = ({ projects }: { projects: Project[] }) => {
           <h2 style={{ fontSize: '3.5rem', fontWeight: 900, letterSpacing: '-0.04em', background: 'linear-gradient(to right, #fff, #888)', WebkitBackgroundClip: 'text', WebkitTextFillColor: 'transparent' }}>
             Project Nexus
           </h2>
-          <p style={{ color: 'rgba(255,255,255,0.4)', marginTop: '0.5rem' }}>Scroll to shuffle and explore the deck</p>
+          <p style={{ color: 'rgba(255,255,255,0.4)', marginTop: '0.5rem' }}>Scroll to explore the sequence</p>
+          
+          {/* Deck Counter Indicator */}
+          <div style={{ 
+            marginTop: '2rem', 
+            display: 'flex', 
+            gap: '0.5rem', 
+            justifyContent: 'center',
+            alignItems: 'center'
+          }}>
+            {projects.map((_, i) => (
+              <motion.div 
+                key={i}
+                style={{
+                  width: '4px',
+                  height: '4px',
+                  borderRadius: '50%',
+                  background: 'var(--primary)',
+                  opacity: useTransform(smoothProgress, [0.3 + (i / projects.length) * 0.5, 0.3 + ((i + 1) / projects.length) * 0.5], [0.2, 1])
+                }}
+              />
+            ))}
+          </div>
         </motion.div>
 
         {/* The Card Stack */}
