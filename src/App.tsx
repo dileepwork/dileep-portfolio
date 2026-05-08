@@ -42,7 +42,8 @@ const PROJECTS_DATA = [
     outcome: "Automated planning system that improves study efficiency and consistency.",
     image: "/projects/studyflow_ai_v2_1775817736464.png",
     tags: ["Python", "AI", "Education", "Automation"],
-    github: "https://github.com/dileepwork/studyflow_ai2.0.git"
+    github: "https://github.com/dileepwork/studyflow_ai2.0.git",
+    demo: "https://studyflow-ai-lac.vercel.app/"
   },
   {
     title: "College Bus Tracking",
