@@ -60,7 +60,7 @@ const Skills = () => {
           #skills { padding: 8rem 2rem !important; }
         }
       `}} />
-      <div className="container" style={{ padding: '0 2.5rem' }}>
+      <div className="container skills-container">
         <motion.div
           initial={{ opacity: 0, y: 16 }}
           whileInView={{ opacity: 1, y: 0 }}
@@ -172,19 +172,24 @@ const Skills = () => {
         </div>
         
         <style dangerouslySetInnerHTML={{ __html: `
+          .skills-container { padding: 0 2.5rem; }
           @media (max-width: 1100px) {
             #skills > div > div:last-child {
               grid-template-columns: 1fr !important;
             }
+          }
+          @media (max-width: 768px) {
+            .skills-container { padding: 0 1rem; }
             .glass {
-              grid-template-columns: 1fr !important;
+              padding: 1.5rem !important;
               text-align: center;
-              padding: 2rem !important;
             }
-            ul {
-              border-left: none !important;
-              padding-left: 0 !important;
-              align-items: center;
+            .glass > div {
+              flex-direction: column !important;
+              gap: 1rem !important;
+            }
+            .glass > div > div:last-child > div {
+              justify-content: center;
             }
           }
         `}} />

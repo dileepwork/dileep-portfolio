@@ -32,7 +32,7 @@ const EndScene = () => {
         }} />
         
         <h2 style={{ 
-          fontSize: 'clamp(3rem, 10vw, 8rem)', 
+          fontSize: 'clamp(2.5rem, 10vw, 8rem)', 
           fontWeight: 900, 
           letterSpacing: '-0.06em',
           lineHeight: 0.9,

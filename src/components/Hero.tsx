@@ -126,11 +126,12 @@ const Hero = () => {
               visible: { opacity: 1, y: 0 }
             }}
             style={{ 
-              fontSize: 'clamp(3rem, 7vw, 5.5rem)', 
+              fontSize: 'clamp(2rem, 8vw, 5.5rem)', 
               fontWeight: 900, 
               lineHeight: 1.05,
               marginBottom: '1rem',
-              letterSpacing: '-0.05em'
+              letterSpacing: '-0.05em',
+              wordBreak: 'break-word'
             }}
           >
             Engineering the <br />
@@ -210,7 +211,7 @@ const Hero = () => {
             display: 'flex',
             alignItems: 'center',
             justifyContent: 'center',
-            minHeight: '600px',
+            minHeight: 'min(600px, 70vh)',
             background: 'transparent' // Ensure no background interferes with screen blend
           }}
         >

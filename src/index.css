@@ -23,20 +23,29 @@
   box-sizing: border-box;
 }
 
-html { scroll-behavior: smooth; }
+html { scroll-behavior: smooth; overflow-x: clip; width: 100vw; max-width: 100%; }
 
 body {
   background-color: var(--bg-dark);
   color: var(--text-main);
   font-family: var(--font-body);
   line-height: 1.6;
-  overflow-x: hidden;
+  overflow-x: clip;
+  width: 100vw;
+  max-width: 100%;
   -webkit-font-smoothing: antialiased;
-  cursor: none; /* Handled by custom cursor */
 }
 
-/* Native cursor hidden everywhere */
-*, *::before, *::after { cursor: none !important; }
+#root {
+  overflow-x: clip;
+  width: 100%;
+}
+
+/* Native cursor hidden everywhere for non-touch devices */
+@media (hover: hover) and (pointer: fine) {
+  body { cursor: none; }
+  *, *::before, *::after { cursor: none !important; }
+}
 
 ::selection {
   background: var(--primary);

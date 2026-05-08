@@ -1,4 +1,4 @@
-import { useState, useRef } from 'react';
+import { useState, useRef, useEffect } from 'react';
 import { motion, useScroll, useTransform, useSpring } from 'framer-motion';
 import { Lightbulb, Target, Zap, ExternalLink } from 'lucide-react';
 
@@ -24,9 +24,17 @@ const ProjectCardFlip = ({ project, index, scrollProgress, total }: { project: P
   // Project Nexus: Progressive Reveal (Linear Fan)
   // Starts fanned out and pans through the deck
   
-  const viewportWidth = typeof window !== 'undefined' ? window.innerWidth : 1200;
-  const cardWidth = 300;
-  const cardSpacing = 280; 
+  const [viewportWidth, setViewportWidth] = useState(typeof window !== 'undefined' ? window.innerWidth : 1200);
+
+  useEffect(() => {
+    const handleResize = () => setViewportWidth(window.innerWidth);
+    window.addEventListener('resize', handleResize);
+    return () => window.removeEventListener('resize', handleResize);
+  }, []);
+
+  const isMobile = viewportWidth < 768;
+  const cardWidth = isMobile ? 270 : 300;
+  const cardSpacing = isMobile ? 250 : 280; 
   
   // Base fanned position
   const fannedX = (index - (total - 1) / 2) * cardSpacing;
@@ -73,7 +81,7 @@ const ProjectCardFlip = ({ project, index, scrollProgress, total }: { project: P
         scale: scaleFocus,
         perspective: '1200px',
         width: `${cardWidth}px`,
-        height: '400px',
+        height: isMobile ? '380px' : '400px',
         zIndex: useTransform(xOffset, (x: any) => {
           if (isFlipped) return 500;
           return Math.round(100 - Math.abs(x as number) / 10);

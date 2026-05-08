@@ -21,7 +21,8 @@ const PROJECTS_DATA = [
     role: "Sensor calibration, logic development, embedded programming, and hardware assembly.",
     outcome: "Functional prototype for automated soil analysis; demonstrates precision agriculture concept.",
     image: "/projects/iot_agriculture_robot_mockup_1775811545492.png",
-    tags: ["Arduino", "IoT", "Sensors", "Agriculture"]
+    tags: ["Arduino", "IoT", "Sensors", "Agriculture"],
+    demo: "https://www.linkedin.com/posts/dileep-v-482035361_built-a-bluetooth-controlled-agriculture-ugcPost-7448966822013599744-0VxM?utm_source=share&utm_medium=member_desktop&rcm=ACoAAGb9-6oB_Nx8qsZe2wKFsjgB362d5YE3RuM"
   },
   {
     title: "EMG Fatigue Detection",
@@ -30,7 +31,8 @@ const PROJECTS_DATA = [
     role: "Signal acquisition, calibration, and firmware development for real-time analysis.",
     outcome: "Working prototype useful for physiotherapy and sports training applications.",
     image: "/projects/emg_muscle_detection_v2_1775817717934.png",
-    tags: ["EMG", "ESP32", "Signal Processing", "Medical Tech"]
+    tags: ["EMG", "ESP32", "Signal Processing", "Medical Tech"],
+    github: "https://github.com/dileepwork/muscle"
   },
   {
     title: "StudyFlow AI",
@@ -59,7 +61,8 @@ const PROJECTS_DATA = [
     role: "Conversation flow design, CRM logic, and WhatsApp API integration.",
     outcome: "Reduced manual effort and improved customer response times melalui automation.",
     image: "/projects/whatsapp_crm_v2_1775817766944.png",
-    tags: ["WhatsApp API", "NLP", "Python", "CRM"]
+    tags: ["WhatsApp API", "NLP", "Python", "CRM"],
+    github: "https://github.com/dileepwork/Customer-Segmentation-AI"
   },
   {
     title: "FusionFlow AI",

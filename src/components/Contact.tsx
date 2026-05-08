@@ -89,11 +89,12 @@ const Contact = () => {
             Get In Touch
           </span>
           <h2 className="text-shadow" style={{
-            fontSize: 'clamp(2.5rem, 6vw, 4.5rem)',
+            fontSize: 'clamp(1.8rem, 8vw, 4.5rem)',
             fontWeight: 900,
             letterSpacing: '-0.04em',
             marginBottom: '1.5rem',
-            lineHeight: 1
+            lineHeight: 1,
+            wordBreak: 'break-word'
           }}>
             Let's Build Something <span style={{ 
               background: 'linear-gradient(135deg, var(--primary), #34d399)',

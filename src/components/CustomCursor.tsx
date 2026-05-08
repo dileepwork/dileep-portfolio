@@ -1,7 +1,8 @@
-import { useEffect } from 'react';
+import { useEffect, useState } from 'react';
 import { motion, useMotionValue, useSpring } from 'framer-motion';
 
 const CustomCursor = () => {
+  const [isTouchDevice, setIsTouchDevice] = useState(false);
   const mx = useMotionValue(-200);
   const my = useMotionValue(-200);
   const scale = useMotionValue(1);
@@ -12,6 +13,11 @@ const CustomCursor = () => {
   const ls = useSpring(scale, { damping: 16, stiffness: 180 });
 
   useEffect(() => {
+    if (window.matchMedia("(pointer: coarse)").matches) {
+      setIsTouchDevice(true);
+      return;
+    }
+
     document.documentElement.style.cursor = 'none';
     document.body.style.cursor = 'none';
 
@@ -43,6 +49,8 @@ const CustomCursor = () => {
       window.removeEventListener('mousedown', onDown);
     };
   }, [mx, my, scale]);
+
+  if (isTouchDevice) return null;
 
   return (
     <>
