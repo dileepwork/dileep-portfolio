@@ -8,8 +8,19 @@ import path from 'path';
 import fs from 'fs';
 import { fileURLToPath } from 'url';
 import { initDb, getDb } from './database.js';
+import { createClient } from '@supabase/supabase-js';
 
 dotenv.config();
+
+const supabaseUrl = process.env.SUPABASE_URL;
+const supabaseServiceKey = process.env.SUPABASE_SERVICE_ROLE_KEY;
+const supabaseBucket = process.env.SUPABASE_BUCKET_NAME || 'portfolio-media';
+
+let supabase = null;
+if (supabaseUrl && supabaseServiceKey) {
+  supabase = createClient(supabaseUrl, supabaseServiceKey);
+  console.log('Supabase Storage client initialized.');
+}
 
 const __filename = fileURLToPath(import.meta.url);
 const __dirname = path.dirname(__filename);
@@ -613,34 +624,88 @@ app.get('/api/media', authenticateToken, (req, res) => {
   });
 });
 
-app.post('/api/media', authenticateToken, upload.single('file'), (req, res) => {
+app.post('/api/media', authenticateToken, upload.single('file'), async (req, res) => {
   if (!req.file) {
     return res.status(400).json({ error: 'No file uploaded' });
   }
 
-  const fileUrl = `/uploads/${req.file.filename}`;
-  db.run("INSERT INTO media (filename, url, file_type, file_size) VALUES (?, ?, ?, ?)",
-    [req.file.originalname, fileUrl, req.file.mimetype, req.file.size],
-    function (err) {
-      if (err) return res.status(500).json({ error: err.message });
-      res.json({ success: true, id: this.lastID, url: fileUrl });
+  try {
+    if (supabase) {
+      const fileBuffer = fs.readFileSync(req.file.path);
+      const fileExt = path.extname(req.file.originalname).toLowerCase();
+      const uniqueFilename = `${Date.now()}-${Math.round(Math.random() * 1e9)}${fileExt}`;
+
+      const { data, error } = await supabase.storage
+        .from(supabaseBucket)
+        .upload(uniqueFilename, fileBuffer, {
+          contentType: req.file.mimetype,
+          cacheControl: '3600',
+          upsert: false
+        });
+
+      if (error) throw error;
+
+      const { data: { publicUrl } } = supabase.storage
+        .from(supabaseBucket)
+        .getPublicUrl(uniqueFilename);
+
+      fs.unlinkSync(req.file.path);
+
+      db.run("INSERT INTO media (filename, url, file_type, file_size) VALUES (?, ?, ?, ?)",
+        [req.file.originalname, publicUrl, req.file.mimetype, req.file.size],
+        function (err) {
+          if (err) return res.status(500).json({ error: err.message });
+          res.json({ success: true, id: this.lastID, url: publicUrl });
+        }
+      );
+    } else {
+      const fileUrl = `/uploads/${req.file.filename}`;
+      db.run("INSERT INTO media (filename, url, file_type, file_size) VALUES (?, ?, ?, ?)",
+        [req.file.originalname, fileUrl, req.file.mimetype, req.file.size],
+        function (err) {
+          if (err) return res.status(500).json({ error: err.message });
+          res.json({ success: true, id: this.lastID, url: fileUrl });
+        }
+      );
     }
-  );
+  } catch (err) {
+    console.error('File upload error:', err);
+    if (req.file && req.file.path && fs.existsSync(req.file.path)) {
+      try { fs.unlinkSync(req.file.path); } catch (e) {}
+    }
+    res.status(500).json({ error: 'File upload failed: ' + err.message });
+  }
 });
 
 app.delete('/api/media/:id', authenticateToken, (req, res) => {
-  db.get("SELECT * FROM media WHERE id = ?", [req.params.id], (err, row) => {
+  db.get("SELECT * FROM media WHERE id = ?", [req.params.id], async (err, row) => {
     if (err) return res.status(500).json({ error: err.message });
     if (!row) return res.status(404).json({ error: 'File not found' });
 
-    const filepath = path.join(__dirname, 'uploads', path.basename(row.url));
-    fs.unlink(filepath, (err) => {
-      // Ignore if file doesn't exist on disk
+    try {
+      const isSupabaseUrl = row.url.includes('supabase.co/storage');
+      if (isSupabaseUrl && supabase) {
+        const parts = row.url.split('/');
+        const filename = parts[parts.length - 1];
+        const { error } = await supabase.storage
+          .from(supabaseBucket)
+          .remove([filename]);
+        if (error) console.error('Error deleting from Supabase storage:', error);
+      } else {
+        const filepath = path.join(__dirname, 'uploads', path.basename(row.url));
+        if (fs.existsSync(filepath)) {
+          fs.unlinkSync(filepath);
+        }
+      }
+
       db.run("DELETE FROM media WHERE id = ?", [req.params.id], function (err) {
         if (err) return res.status(500).json({ error: err.message });
         res.json({ success: true });
       });
-    });
+    } catch (deleteErr) {
+      console.error('File delete error:', deleteErr);
+      res.status(500).json({ error: 'File deletion failed: ' + deleteErr.message });
+    }
   });
 });
 
@@ -702,6 +767,10 @@ app.put('/api/settings/change-password', authenticateToken, (req, res) => {
 
 
 // Start Server
-app.listen(PORT, () => {
-  console.log(`Server is running in background at http://localhost:${PORT}`);
-});
+if (process.env.NODE_ENV !== 'production' || !process.env.VERCEL) {
+  app.listen(PORT, () => {
+    console.log(`Server is running in background at http://localhost:${PORT}`);
+  });
+}
+
+export default app;
