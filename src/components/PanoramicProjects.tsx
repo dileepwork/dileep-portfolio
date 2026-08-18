@@ -12,10 +12,14 @@ interface Project {
   solution: string;
   role: string;
   outcome: string;
-  image: string;
-  tags: string[];
+  image?: string;
+  image_url?: string;
+  tags?: string[];
+  technologies?: string[];
   github?: string;
+  github_url?: string;
   demo?: string;
+  demo_url?: string;
 }
 
 const ProjectCardFlip = ({ project, index, scrollProgress, total }: { project: Project; index: number, scrollProgress: any, total: number }) => {
@@ -117,13 +121,13 @@ const ProjectCardFlip = ({ project, index, scrollProgress, total }: { project: P
           border: `1px solid ${accent}40`,
           boxShadow: `0 15px 35px rgba(0,0,0,0.5), 0 0 20px ${accent}20`,
         }}>
-          <img src={project.image} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
+          <img src={project.image_url || project.image} alt={project.title} style={{ width: '100%', height: '100%', objectFit: 'cover', opacity: 0.8 }} />
           <div style={{ position: 'absolute', inset: 0, background: 'linear-gradient(to top, rgba(0,0,0,0.9), transparent)' }} />
           
           <div style={{ position: 'absolute', bottom: '1.5rem', left: '1.5rem', right: '1.5rem' }}>
             <h3 style={{ fontSize: '1.2rem', fontWeight: 900, marginBottom: '0.5rem' }}>{project.title}</h3>
             <div style={{ display: 'flex', gap: '0.4rem', flexWrap: 'wrap' }}>
-              {project.tags.slice(0, 2).map((t, i) => (
+              {(project.tags || project.technologies || []).slice(0, 2).map((t, i) => (
                 <span key={i} style={{ fontSize: '0.6rem', padding: '0.2rem 0.5rem', background: `${accent}20`, color: accent, borderRadius: '1rem', border: `1px solid ${accent}40` }}>
                   {t}
                 </span>
@@ -185,14 +189,14 @@ const ProjectCardFlip = ({ project, index, scrollProgress, total }: { project: P
 
           <div style={{ display: 'flex', gap: '0.75rem', marginTop: 'auto' }}>
             <button 
-              onClick={(e) => { e.stopPropagation(); if(project.github) window.open(project.github, '_blank'); }}
-              style={{ flex: 1, background: `${accent}20`, border: `1px solid ${accent}40`, color: '#fff', padding: '0.5rem', borderRadius: '0.5rem', fontSize: '0.7rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', cursor: project.github ? 'pointer' : 'not-allowed', opacity: project.github ? 1 : 0.4 }}
+              onClick={(e) => { e.stopPropagation(); const git = project.github_url || project.github; if(git) window.open(git, '_blank'); }}
+              style={{ flex: 1, background: `${accent}20`, border: `1px solid ${accent}40`, color: '#fff', padding: '0.5rem', borderRadius: '0.5rem', fontSize: '0.7rem', display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', cursor: (project.github_url || project.github) ? 'pointer' : 'not-allowed', opacity: (project.github_url || project.github) ? 1 : 0.4 }}
             >
               <GithubIcon size={14} /> Code
             </button>
             <button 
-              onClick={(e) => { e.stopPropagation(); if(project.demo) window.open(project.demo, '_blank'); }}
-              style={{ flex: 1, background: accent, border: 'none', color: '#000', padding: '0.5rem', borderRadius: '0.5rem', fontSize: '0.7rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', cursor: project.demo ? 'pointer' : 'not-allowed', opacity: project.demo ? 1 : 0.4 }}
+              onClick={(e) => { e.stopPropagation(); const demo = project.demo_url || project.demo; if(demo) window.open(demo, '_blank'); }}
+              style={{ flex: 1, background: accent, border: 'none', color: '#000', padding: '0.5rem', borderRadius: '0.5rem', fontSize: '0.7rem', fontWeight: 700, display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '0.3rem', cursor: (project.demo_url || project.demo) ? 'pointer' : 'not-allowed', opacity: (project.demo_url || project.demo) ? 1 : 0.4 }}
             >
               <ExternalLink size={14} /> Demo
             </button>

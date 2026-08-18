@@ -1,6 +1,19 @@
+import React from 'react';
 import { motion } from 'framer-motion';
+import { Download } from 'lucide-react';
 
+interface Profile {
+  name: string;
+  title: string;
+  intro: string;
+  about: string;
+  profile_image: string;
+  resume_url: string;
+}
 
+interface HeroProps {
+  profile: Profile;
+}
 
 const QuantumNetwork = () => {
   return (
@@ -81,7 +94,7 @@ const QuantumNetwork = () => {
   );
 };
 
-const Hero = () => {
+const Hero: React.FC<HeroProps> = ({ profile }) => {
   return (
     <section style={{ 
       minHeight: '100vh', 
@@ -93,11 +106,11 @@ const Hero = () => {
     }}>
       <div className="container hero-grid" style={{ 
         display: 'grid',
-        gridTemplateColumns: '1fr 1fr', // Symmetrical 50/50 high-impact split
+        gridTemplateColumns: '1fr 1fr',
         gap: '4rem',
         alignItems: 'center',
         width: '100%',
-        maxWidth: '1400px', // Wider layout to use all space
+        maxWidth: '1400px',
         margin: '0 auto',
         position: 'relative',
         zIndex: 1
@@ -118,7 +131,32 @@ const Hero = () => {
           }}
           style={{ textAlign: 'left' }}
         >
+          {/* Specialization category tag */}
+          <motion.span
+            variants={{
+              hidden: { opacity: 0, y: 15 },
+              visible: { opacity: 1, y: 0 }
+            }}
+            style={{
+              color: 'var(--primary)',
+              fontWeight: 800,
+              letterSpacing: '0.18em',
+              textTransform: 'uppercase',
+              fontSize: '0.72rem',
+              display: 'block',
+              marginBottom: '1rem',
+              border: '1px solid rgba(16, 185, 129, 0.2)',
+              padding: '0.3rem 0.8rem',
+              borderRadius: '2rem',
+              background: 'rgba(16, 185, 129, 0.03)',
+              alignSelf: 'flex-start',
+              width: 'fit-content'
+            }}
+          >
+            {profile.title || "IoT & Embedded Systems Engineer"}
+          </motion.span>
 
+          {/* Name heading */}
           <motion.h1 
             className="text-shadow"
             variants={{
@@ -129,20 +167,21 @@ const Hero = () => {
               fontSize: 'clamp(2rem, 8vw, 5.5rem)', 
               fontWeight: 900, 
               lineHeight: 1.05,
-              marginBottom: '1rem',
+              marginBottom: '1.25rem',
               letterSpacing: '-0.05em',
-              wordBreak: 'break-word'
+              wordBreak: 'break-word',
+              color: '#fff'
             }}
           >
-            Engineering the <br />
-            <span style={{ 
+            I'm <span style={{ 
               background: 'linear-gradient(135deg, var(--primary) 0%, #34d399 50%, #10b981 100%)',
               WebkitBackgroundClip: 'text',
               WebkitTextFillColor: 'transparent',
               filter: 'drop-shadow(0 0 25px rgba(16, 185, 129, 0.2))'
-            }}>Technological Future</span>
+            }}>{profile.name || "Dileep V"}</span>
           </motion.h1>
           
+          {/* Subtitle Intro */}
           <motion.p 
             variants={{
               hidden: { opacity: 0, y: 20 },
@@ -158,17 +197,54 @@ const Hero = () => {
               fontWeight: 300
             }}
           >
-            Pioneering high-precision IoT engineering and specialized 
-            embedded systems built to unify the digital and physical worlds.
+            {profile.intro || "Pioneering high-precision IoT engineering and specialized embedded systems built to unify the digital and physical worlds."}
           </motion.p>
 
-          {/* Immersive Scroll HUD Replacement */}
+          {/* Resume Download Trigger */}
+          {profile.resume_url ? (
+            <motion.div
+              variants={{
+                hidden: { opacity: 0, y: 15 },
+                visible: { opacity: 1, y: 0 }
+              }}
+              style={{ marginBottom: '3rem' }}
+            >
+              <a 
+                href={profile.resume_url}
+                target="_blank"
+                rel="noreferrer"
+                style={{
+                  display: 'inline-flex',
+                  alignItems: 'center',
+                  gap: '0.5rem',
+                  background: 'rgba(16, 185, 129, 0.08)',
+                  border: '1px solid var(--primary)',
+                  color: 'var(--primary)',
+                  padding: '0.75rem 1.6rem',
+                  borderRadius: '2rem',
+                  fontSize: '0.85rem',
+                  fontWeight: 800,
+                  textDecoration: 'none',
+                  cursor: 'pointer',
+                  boxShadow: '0 0 15px rgba(16,185,129,0.1)',
+                  transition: 'all 0.25s'
+                }}
+                onMouseOver={(e) => { e.currentTarget.style.background = 'var(--primary)'; e.currentTarget.style.color = '#000'; }}
+                onMouseOut={(e) => { e.currentTarget.style.background = 'rgba(16, 185, 129, 0.08)'; e.currentTarget.style.color = 'var(--primary)'; }}
+              >
+                <Download size={14} />
+                <span>DOWNLOAD RESUME / CV</span>
+              </a>
+            </motion.div>
+          ) : null}
+
+          {/* Immersive Scroll HUD */}
           <motion.div 
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
             transition={{ delay: 1, duration: 1.5 }}
             style={{ 
-              marginTop: '4rem', 
+              marginTop: '1.5rem', 
               display: 'flex', 
               flexDirection: 'column', 
               gap: '1.2rem',
@@ -184,7 +260,7 @@ const Hero = () => {
                 style={{ width: '8px', height: '8px', borderRadius: '50%', background: 'var(--primary)', boxShadow: '0 0 10px var(--primary)' }}
               />
               <span style={{ fontSize: '0.7rem', fontWeight: 900, letterSpacing: '0.2em', textTransform: 'uppercase', color: 'var(--primary)' }}>
-                System Ready: v4.0.2
+                System Ready: Active
               </span>
             </div>
             
@@ -212,7 +288,7 @@ const Hero = () => {
             alignItems: 'center',
             justifyContent: 'center',
             minHeight: 'min(600px, 70vh)',
-            background: 'transparent' // Ensure no background interferes with screen blend
+            background: 'transparent'
           }}
         >
           {/* Background Quantum Rings */}
@@ -221,8 +297,8 @@ const Hero = () => {
           </div>
 
           <motion.img 
-            src="/robot.png" 
-            alt="Robotic Assistant"
+            src={profile.profile_image || "/robot.png"} 
+            alt="Robotic Assistant / Dileep"
             animate={{ y: [10, -10, 10] }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
             style={{
@@ -230,8 +306,8 @@ const Hero = () => {
               maxHeight: '85vh',
               objectFit: 'contain',
               mixBlendMode: 'screen',
-              filter: 'brightness(1.2) contrast(1.5)', // Increased contrast to kill near-black pixels
-              WebkitMaskImage: 'radial-gradient(circle, black 60%, transparent 95%)', // Hide box edges
+              filter: 'brightness(1.2) contrast(1.5)',
+              WebkitMaskImage: 'radial-gradient(circle, black 60%, transparent 95%)',
               maskImage: 'radial-gradient(circle, black 60%, transparent 95%)',
               pointerEvents: 'none',
               position: 'relative',

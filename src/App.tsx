@@ -1,10 +1,17 @@
-import { useEffect, useRef } from 'react';
+import { useEffect, useRef, useState } from 'react';
 import Lenis from 'lenis';
 import { motion } from 'framer-motion';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
+
+// Public Components
 import Navbar from './components/Navbar';
 import Hero from './components/Hero';
 import PanoramicProjects from './components/PanoramicProjects';
 import Skills from './components/Skills';
+import Experiences from './components/Experiences';
+import Education from './components/Education';
+import Certificates from './components/Certificates';
+import Achievements from './components/Achievements';
 import Contact from './components/Contact';
 import EndScene from './components/EndScene';
 import VRTunnel from './components/VRTunnel';
@@ -12,101 +19,40 @@ import VRHud from './components/VRHud';
 import CustomCursor from './components/CustomCursor';
 import { MouseParallaxProvider } from './components/MouseParallaxProvider';
 
-// We'll update these with real details provided by the user
-const PROJECTS_DATA = [
-  {
-    title: "IoT Agriculture Robot",
-    problem: "Manual soil monitoring is inefficient and inconsistent, affecting crop health and yield.",
-    solution: "Developed an autonomous robot that measures soil moisture and environmental conditions for precision agriculture using automated sensing logic.",
-    role: "Sensor calibration, logic development, embedded programming, and hardware assembly.",
-    outcome: "Functional prototype for automated soil analysis; demonstrates precision agriculture concept.",
-    image: "/projects/iot_agriculture_robot_mockup_1775811545492.png",
-    tags: ["Arduino", "IoT", "Sensors", "Agriculture"],
-    demo: "https://www.linkedin.com/posts/dileep-v-482035361_built-a-bluetooth-controlled-agriculture-ugcPost-7448966822013599744-0VxM?utm_source=share&utm_medium=member_desktop&rcm=ACoAAGb9-6oB_Nx8qsZe2wKFsjgB362d5YE3RuM"
-  },
-  {
-    title: "EMG Fatigue Detection",
-    problem: "Muscle fatigue is difficult to quantify in real-time, leading to injuries in patients and athletes.",
-    solution: "Built a system capturing EMG signals to analyze muscle activity and detect fatigue levels dynamically.",
-    role: "Signal acquisition, calibration, and firmware development for real-time analysis.",
-    outcome: "Working prototype useful for physiotherapy and sports training applications.",
-    image: "/projects/emg_muscle_detection_v2_1775817717934.png",
-    tags: ["EMG", "ESP32", "Signal Processing", "Medical Tech"],
-    github: "https://github.com/dileepwork/muscle"
-  },
-  {
-    title: "StudyFlow AI",
-    problem: "Students struggle to convert large, unstructured syllabus content into actionable study plans.",
-    solution: "AI-powered assistant that analyzes syllabuses and generates optimized, personalized study schedules.",
-    role: "System architecture, syllabus analysis algorithm, and adaptive plan generation logic.",
-    outcome: "Automated planning system that improves study efficiency and consistency.",
-    image: "/projects/studyflow_ai_v2_1775817736464.png",
-    tags: ["Python", "AI", "Education", "Automation"],
-    github: "https://github.com/dileepwork/studyflow_ai2.0.git",
-    demo: "https://studyflow-ai-lac.vercel.app/"
-  },
-  {
-    title: "College Bus Tracking",
-    problem: "Uncertainty in bus arrival times leads to delays and inefficient commute planning.",
-    solution: "Multi-user system with live GPS tracking, route management, and ETA notifications for students and drivers.",
-    role: "Multi-app ecosystem architecture, tracking logic, and backend integration.",
-    outcome: "Improved commute transparency and centralized control for transport management.",
-    image: "/projects/bus_tracking_v2_1775817751690.png",
-    tags: ["Node.js", "Firebase", "GPS", "Fleet Management"],
-    github: "https://github.com/dileepwork/project_bus.git"
-  },
-  {
-    title: "Arjun AI - WhatsApp CRM",
-    problem: "Small businesses struggle to manage customer interactions across WhatsApp efficiently.",
-    solution: "AI WhatsApp assistant that automates communication, categorizes leads, and handles follow-ups.",
-    role: "Conversation flow design, CRM logic, and WhatsApp API integration.",
-    outcome: "Reduced manual effort and improved customer response times melalui automation.",
-    image: "/projects/whatsapp_crm_v2_1775817766944.png",
-    tags: ["WhatsApp API", "NLP", "Python", "CRM"],
-    github: "https://github.com/dileepwork/Customer-Segmentation-AI"
-  },
-  {
-    title: "FusionFlow AI",
-    problem: "Organizations face manual attendance errors and lack of real-time workforce visibility.",
-    solution: "Intelligent employee management system with biometric tracking and role-based access.",
-    role: "Database structure design, authentication system, and reporting features.",
-    outcome: "Streamlined attendance tracking and improved organizational visibility.",
-    image: "/projects/attendance_management_v2_1775817782969.png",
-    tags: ["React", "Node.js", "HR Management", "Auth"]
-  },
-  {
-    title: "RoadGuard AI",
-    problem: "Potholes cause accidents and vehicle damage; reporting systems are slow and manual.",
-    solution: "Mobile app using AI to detect potholes via image capture and report road conditions with GPS tagging.",
-    role: "AI detection pipeline, image processing integration, and gamified reporting logic.",
-    outcome: "Enables faster road repair identification through crowdsourced data collection.",
-    image: "/projects/roadguard_ai_v2_1775817799400.png",
-    tags: ["Computer Vision", "Firebase", "Civic Tech", "Mobile"],
-    github: "https://github.com/Dhinesh71/Roadguard_ai.git"
-  },
-  {
-    title: "VisionGuard AI",
-    problem: "Delayed accident detection leads to fatalities due to slow emergency response.",
-    solution: "AI system analyzing CCTV footage to identify accidents and alert emergency services instantly.",
-    role: "End-to-end architecture, video processing pipeline, and alert triggering logic.",
-    outcome: "Reduces response time in accidents; demonstrates smart-city safety solutions.",
-    image: "/projects/visionguard_ai_accident_mockup_1775811563972.png",
-    tags: ["Computer Vision", "Python", "Smart City", "Security"],
-    github: "https://github.com/dhineshdevhub/VisionGuard-AI.git"
-  }
-];
+// Admin Auth & Layout
+import { AuthProvider } from './admin/AuthContext';
+import { ProtectedRoute } from './admin/ProtectedRoute';
+import AdminLayout from './admin/AdminLayout';
+import Login from './admin/Login';
 
-const Scene = ({ children, id }: { children: React.ReactNode, id: string }) => {
+// Admin CMS Panels
+import DashboardHome from './admin/DashboardHome';
+import ProjectManagement from './admin/ProjectManagement';
+import ProjectForm from './admin/ProjectForm';
+import ExperienceManagement from './admin/ExperienceManagement';
+import ExperienceForm from './admin/ExperienceForm';
+import SkillsManagement from './admin/SkillsManagement';
+import CertificatesManagement from './admin/CertificatesManagement';
+import AchievementsManagement from './admin/AchievementsManagement';
+import EducationManagement from './admin/EducationManagement';
+import SocialLinksManagement from './admin/SocialLinksManagement';
+import ContactMessages from './admin/ContactMessages';
+import MediaLibrary from './admin/MediaLibrary';
+import ProfileManagement from './admin/ProfileManagement';
+import Settings from './admin/Settings';
+
+// Public Section Wrapper
+const Scene = ({ children, id }: { children: React.ReactNode; id: string }) => {
   return (
     <motion.section
       id={id}
-      initial={{ opacity: 0, y: 100 }}
+      initial={{ opacity: 0, y: 80 }}
       whileInView={{ opacity: 1, y: 0 }}
-      viewport={{ once: false, amount: 0.1 }}
+      viewport={{ once: true, amount: 0.15 }}
       transition={{ 
-        duration: 0.8, 
-        ease: [0.22, 1, 0.36, 1], // Premium easeOutExpo
-        opacity: { duration: 1 } 
+        duration: 0.7, 
+        ease: [0.22, 1, 0.36, 1],
+        opacity: { duration: 0.9 } 
       }}
       style={{
         minHeight: '100vh',
@@ -116,7 +62,7 @@ const Scene = ({ children, id }: { children: React.ReactNode, id: string }) => {
         justifyContent: 'center',
         position: 'relative',
         zIndex: 1,
-        marginBottom: '4rem',
+        marginBottom: '2rem',
       }}
     >
       <div style={{ width: '100%' }}>
@@ -126,9 +72,24 @@ const Scene = ({ children, id }: { children: React.ReactNode, id: string }) => {
   );
 };
 
-function App() {
+// --- PUBLIC PORTFOLIO COMPONENT ---
+const PublicPortfolio = () => {
   const lenisRef = useRef<Lenis | null>(null);
+  
+  // Data State
+  const [profile, setProfile] = useState<any>(null);
+  const [projects, setProjects] = useState<any[]>([]);
+  const [skills, setSkills] = useState<any[]>([]);
+  const [experiences, setExperiences] = useState<any[]>([]);
+  const [education, setEducation] = useState<any[]>([]);
+  const [certificates, setCertificates] = useState<any[]>([]);
+  const [achievements, setAchievements] = useState<any[]>([]);
+  const [socialLinks, setSocialLinks] = useState<any[]>([]);
+  
+  const [loading, setLoading] = useState(true);
+  const [systemLogs, setSystemLogs] = useState<string[]>([]);
 
+  // Smooth Scrolling setup
   useEffect(() => {
     const lenis = new Lenis({
       duration: 1.2,
@@ -150,6 +111,73 @@ function App() {
     };
   }, []);
 
+  // Fetch API dataset
+  useEffect(() => {
+    const addLog = (msg: string) => {
+      setSystemLogs(prev => [...prev, `[INIT] ${msg}`]);
+    };
+
+    const loadDataset = async () => {
+      try {
+        addLog("Resolving core identity structures...");
+        const resProfile = await fetch('/api/public/profile');
+        if (resProfile.ok) {
+          const profileData = await resProfile.json();
+          setProfile(profileData);
+        }
+
+        addLog("Loading global SEO configuration keys...");
+        const resSettings = await fetch('/api/public/settings');
+        if (resSettings.ok) {
+          const settingsData = await resSettings.json();
+          if (settingsData.portfolio_title) {
+            document.title = settingsData.portfolio_title;
+          }
+          if (settingsData.seo_description) {
+            const meta = document.querySelector('meta[name="description"]');
+            if (meta) meta.setAttribute('content', settingsData.seo_description);
+          }
+        }
+
+        addLog("Querying project stack elements...");
+        const resProj = await fetch('/api/public/projects');
+        if (resProj.ok) setProjects(await resProj.json());
+
+        addLog("Compiling technical skillset logs...");
+        const resSkills = await fetch('/api/public/skills');
+        if (resSkills.ok) setSkills(await resSkills.json());
+
+        addLog("Assembling work history milestones...");
+        const resExp = await fetch('/api/public/experiences');
+        if (resExp.ok) setExperiences(await resExp.json());
+
+        addLog("Compiling academic qualifications details...");
+        const resEdu = await fetch('/api/public/education');
+        if (resEdu.ok) setEducation(await resEdu.json());
+
+        addLog("Verifying security certifications...");
+        const resCerts = await fetch('/api/public/certificates');
+        if (resCerts.ok) setCertificates(await resCerts.json());
+
+        addLog("Loading hackathons achievements archive...");
+        const resAchs = await fetch('/api/public/achievements');
+        if (resAchs.ok) setAchievements(await resAchs.json());
+
+        addLog("Fetching contact networks...");
+        const resSocials = await fetch('/api/public/social-links');
+        if (resSocials.ok) setSocialLinks(await resSocials.json());
+
+        addLog("System diagnostic: ALL SYSTEMS OPERATIONAL");
+        setTimeout(() => setLoading(false), 900);
+      } catch (err) {
+        console.error("Error loading portfolio dataset:", err);
+        setLoading(false);
+      }
+    };
+
+    loadDataset();
+  }, []);
+
   const scrollToSection = (section: string) => {
     const element = document.getElementById(section);
     if (element && lenisRef.current) {
@@ -160,11 +188,43 @@ function App() {
     }
   };
 
+  // Futuristic Terminal Loader
+  if (loading) {
+    return (
+      <div style={{
+        background: '#05080D',
+        minHeight: '100vh',
+        color: '#10b981',
+        display: 'flex',
+        flexDirection: 'column',
+        alignItems: 'center',
+        justifyContent: 'center',
+        fontFamily: 'monospace',
+        padding: '2rem',
+        gap: '1.5rem'
+      }}>
+        <div style={{ display: 'flex', flexDirection: 'column', gap: '0.4rem', width: '100%', maxWidth: '500px', border: '1px solid rgba(16,185,129,0.15)', background: '#0B1118', padding: '1.5rem', borderRadius: '0.5rem', boxShadow: '0 0 30px rgba(16,185,129,0.05)' }}>
+          <div style={{ borderBottom: '1px solid rgba(16,185,129,0.1)', paddingBottom: '0.4rem', marginBottom: '0.8rem', fontWeight: 'bold', fontSize: '0.85rem' }}>
+            CYBER-NEXUS DECK INITIALIZATION
+          </div>
+          <div style={{ height: '140px', overflowY: 'auto', display: 'flex', flexDirection: 'column', gap: '0.3rem', fontSize: '0.75rem', color: '#8B98A8' }}>
+            {systemLogs.map((log, idx) => (
+              <div key={idx}>{log}</div>
+            ))}
+          </div>
+        </div>
+        <div style={{ fontSize: '0.8rem', color: '#10b981', fontWeight: 'bold', letterSpacing: '0.1em' }}>
+          LOADING DATA DECK INTERFACE...
+        </div>
+      </div>
+    );
+  }
+
   return (
     <MouseParallaxProvider>
       <div className="app-container" style={{ background: 'transparent', position: 'relative' }}>
-
-        {/* VR Environment - Stays fixed in background */}
+        
+        {/* Futuristic VR Environment overlays */}
         <VRTunnel />
         <VRHud />
         <CustomCursor />
@@ -172,30 +232,129 @@ function App() {
         <Navbar onNavigate={scrollToSection} />
 
         <main style={{ position: 'relative', width: '100%' }}>
+          
           <Scene id="hero">
-            <Hero />
+            <Hero profile={profile || { name: 'Dileep V', title: 'IoT Engineer', intro: '', profile_image: '/robot.png', resume_url: '' }} />
           </Scene>
 
-          <Scene id="projects">
-            <div style={{ paddingTop: '5rem' }}>
-              <PanoramicProjects projects={PROJECTS_DATA} />
-            </div>
-          </Scene>
+          {projects && projects.length > 0 && (
+            <section id="projects" style={{ width: '100%', position: 'relative' }}>
+              <PanoramicProjects projects={projects} />
+            </section>
+          )}
 
-          <Scene id="skills">
-            <Skills />
-          </Scene>
+          {skills && skills.length > 0 && (
+            <Scene id="skills">
+              <Skills skills={skills} />
+            </Scene>
+          )}
+
+          {experiences && experiences.length > 0 && (
+            <Scene id="experiences">
+              <Experiences experiences={experiences} />
+            </Scene>
+          )}
+
+          {education && education.length > 0 && (
+            <Scene id="education">
+              <Education education={education} />
+            </Scene>
+          )}
+
+          {certificates && certificates.length > 0 && (
+            <Scene id="certificates">
+              <Certificates certificates={certificates} />
+            </Scene>
+          )}
+
+          {achievements && achievements.length > 0 && (
+            <Scene id="achievements">
+              <Achievements achievements={achievements} />
+            </Scene>
+          )}
 
           <Scene id="contact">
-            <Contact />
+            <Contact 
+              profile={profile || { email: '', phone: '', location: '' }} 
+              socialLinks={socialLinks || []} 
+            />
           </Scene>
 
           <Scene id="end">
             <EndScene />
           </Scene>
+
         </main>
       </div>
     </MouseParallaxProvider>
+  );
+};
+
+// --- MAIN ROUTE CONTROLLER ---
+const AppInner = () => {
+  const location = useLocation();
+  const isAdminRoute = location.pathname.startsWith('/admin');
+
+  return (
+    <>
+      {/* If we are on an admin screen, override cursor styles to restore normal system cursor */}
+      {isAdminRoute && (
+        <style dangerouslySetInnerHTML={{ __html: `
+          * { cursor: auto !important; }
+          body { overflow: auto !important; }
+        `}} />
+      )}
+
+      <Routes>
+        {/* Public Portfolio Route */}
+        <Route path="/" element={<PublicPortfolio />} />
+
+        {/* Secure Admin Portal Login */}
+        <Route path="/admin/login" element={<Login />} />
+
+        {/* Protected Dashboard Routes */}
+        <Route path="/admin" element={<ProtectedRoute><AdminLayout /></ProtectedRoute>}>
+          <Route index element={<Navigate to="dashboard" replace />} />
+          <Route path="dashboard" element={<DashboardHome />} />
+          
+          {/* Projects CRUD */}
+          <Route path="projects" element={<ProjectManagement />} />
+          <Route path="projects/new" element={<ProjectForm />} />
+          <Route path="projects/edit/:id" element={<ProjectForm />} />
+          
+          {/* Experiences CRUD */}
+          <Route path="experiences" element={<ExperienceManagement />} />
+          <Route path="experiences/new" element={<ExperienceForm />} />
+          <Route path="experiences/edit/:id" element={<ExperienceForm />} />
+          
+          {/* Other CRM segments */}
+          <Route path="skills" element={<SkillsManagement />} />
+          <Route path="certificates" element={<CertificatesManagement />} />
+          <Route path="achievements" element={<AchievementsManagement />} />
+          <Route path="education" element={<EducationManagement />} />
+          <Route path="socials" element={<SocialLinksManagement />} />
+          
+          {/* Miscellaneous panels */}
+          <Route path="messages" element={<ContactMessages />} />
+          <Route path="media" element={<MediaLibrary />} />
+          <Route path="profile" element={<ProfileManagement />} />
+          <Route path="settings" element={<Settings />} />
+        </Route>
+
+        {/* Fallback Redirect */}
+        <Route path="*" element={<Navigate to="/" replace />} />
+      </Routes>
+    </>
+  );
+};
+
+function App() {
+  return (
+    <BrowserRouter>
+      <AuthProvider>
+        <AppInner />
+      </AuthProvider>
+    </BrowserRouter>
   );
 }
 

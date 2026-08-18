@@ -1,58 +1,71 @@
+import React from 'react';
 import { motion } from 'framer-motion';
 import { Cpu, Code2, BrainCircuit, Wrench } from 'lucide-react';
 
-const skillCategories = [
-  {
-    title: "Core Expertise",
-    icon: <Cpu size={26} />,
-    color: "rgba(16, 185, 129, 0.2)",
-    accent: "#10b981",
-    skills: [
-      "Embedded Systems Development",
-      "IoT System Design & Prototyping",
-      "Sensor Fusion & Real-Time Monitoring",
-      "Wearable Tech & Medical Devices"
-    ]
-  },
-  {
-    title: "Software & Programming",
-    icon: <Code2 size={26} />,
-    color: "rgba(139, 92, 246, 0.2)",
-    accent: "#8b5cf6",
-    skills: [
-      "Embedded C / C++ (Arduino)",
-      "Python (Data & Signal Processing)",
-      "Firmware Development",
-      "Serial Communication & Debugging"
-    ]
-  },
-  {
-    title: "AI & Data Applications",
-    icon: <BrainCircuit size={26} />,
-    color: "rgba(245, 158, 11, 0.2)",
-    accent: "#f59e0b",
-    skills: [
-      "Sensor Data Interpretation",
-      "Predictive Systems Design",
-      "Threshold-Free Edge Analysis",
-      "Real-Time Analytics Integration"
-    ]
-  },
-  {
-    title: "Tools & Platforms",
-    icon: <Wrench size={26} />,
-    color: "rgba(236, 72, 153, 0.2)",
-    accent: "#ec4899",
-    skills: [
-      "KiCad & EasyEDA (PCB Design)",
-      "Proteus Circuit Simulation",
-      "Git & Version Control",
-      "Arduino & PlatformIO"
-    ]
-  }
-];
+interface Skill {
+  id: number;
+  name: string;
+  category: string;
+  proficiency: string;
+  display_order: number;
+}
 
-const Skills = () => {
+interface SkillsProps {
+  skills: Skill[];
+}
+
+const Skills: React.FC<SkillsProps> = ({ skills }) => {
+  // Define Category display mappings
+  const categoryMeta: Record<string, { title: string; icon: React.ReactNode; color: string; accent: string }> = {
+    'Embedded Systems': {
+      title: "Core Expertise",
+      icon: <Cpu size={26} />,
+      color: "rgba(16, 185, 129, 0.2)",
+      accent: "#10b981"
+    },
+    'Programming': {
+      title: "Software & Programming",
+      icon: <Code2 size={26} />,
+      color: "rgba(139, 92, 246, 0.2)",
+      accent: "#8b5cf6"
+    },
+    'IoT': {
+      title: "IoT & Automations",
+      icon: <BrainCircuit size={26} />,
+      color: "rgba(245, 158, 11, 0.2)",
+      accent: "#f59e0b"
+    },
+    'AI / Software': {
+      title: "AI & Platform tools",
+      icon: <Wrench size={26} />,
+      color: "rgba(236, 72, 153, 0.2)",
+      accent: "#ec4899"
+    }
+  };
+
+  // Group skills by category
+  const groupedSkills: Record<string, string[]> = {
+    'Embedded Systems': [],
+    'Programming': [],
+    'IoT': [],
+    'AI / Software': []
+  };
+
+  skills.forEach(s => {
+    const cat = s.category;
+    if (groupedSkills[cat]) {
+      groupedSkills[cat].push(s.name);
+    } else {
+      // Fallback category container
+      if (!groupedSkills['AI / Software']) {
+        groupedSkills['AI / Software'] = [];
+      }
+      groupedSkills['AI / Software'].push(s.name);
+    }
+  });
+
+  const categories = Object.keys(categoryMeta).filter(cat => groupedSkills[cat] && groupedSkills[cat].length > 0);
+
   return (
     <section id="skills" style={{ padding: '5rem 2rem' }}>
       <style dangerouslySetInnerHTML={{ __html: `
@@ -101,74 +114,79 @@ const Skills = () => {
           maxWidth: '1200px',
           margin: '0 auto',
         }}>
-          {skillCategories.map((category, index) => (
-            <motion.div
-              key={index}
-              initial={{ opacity: 0, y: 12 }}
-              whileInView={{ opacity: 1, y: 0 }}
-              viewport={{ once: true }}
-              transition={{ duration: 0.5, delay: index * 0.1 }}
-              whileHover={{ scale: 1.01, borderColor: `${category.accent}80` }}
-              className="glass"
-              style={{
-                padding: '2rem',
-                borderRadius: '1.5rem',
-                position: 'relative',
-                overflow: 'hidden',
-                transition: 'all 0.3s ease'
-              }}
-            >
-              {/* Circuit board decoration */}
-              <div style={{ position: 'absolute', top: 0, right: 0, width: '100px', height: '100px', opacity: 0.15 }}>
-                <div style={{ position: 'absolute', top: '15px', right: '15px', width: '30px', height: '30px', borderTop: `1px solid ${category.accent}`, borderRight: `1px solid ${category.accent}` }} />
-              </div>
+          {categories.map((cat, index) => {
+            const meta = categoryMeta[cat] || categoryMeta['AI / Software'];
+            const list = groupedSkills[cat];
 
-              <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
-                <div style={{
-                  width: '56px',
-                  height: '56px',
-                  borderRadius: '1rem',
-                  background: 'rgba(255,255,255,0.02)',
-                  border: `1px solid ${category.accent}30`,
-                  display: 'flex',
-                  alignItems: 'center',
-                  justifyContent: 'center',
-                  color: category.accent,
-                  boxShadow: `0 0 15px ${category.accent}15`,
-                  flexShrink: 0
-                }}>
-                  {category.icon}
+            return (
+              <motion.div
+                key={index}
+                initial={{ opacity: 0, y: 12 }}
+                whileInView={{ opacity: 1, y: 0 }}
+                viewport={{ once: true }}
+                transition={{ duration: 0.5, delay: index * 0.1 }}
+                whileHover={{ scale: 1.01, borderColor: `${meta.accent}80` }}
+                className="glass"
+                style={{
+                  padding: '2rem',
+                  borderRadius: '1.5rem',
+                  position: 'relative',
+                  overflow: 'hidden',
+                  transition: 'all 0.3s ease'
+                }}
+              >
+                {/* Circuit board decoration */}
+                <div style={{ position: 'absolute', top: 0, right: 0, width: '100px', height: '100px', opacity: 0.15 }}>
+                  <div style={{ position: 'absolute', top: '15px', right: '15px', width: '30px', height: '30px', borderTop: `1px solid ${meta.accent}`, borderRight: `1px solid ${meta.accent}` }} />
                 </div>
-                
-                <div style={{ flex: 1 }}>
-                  <h3 style={{ fontSize: '1.15rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
-                    {category.title}
-                  </h3>
-                  
-                  <div style={{ 
-                    display: 'flex', 
-                    flexWrap: 'wrap', 
-                    gap: '0.5rem'
+
+                <div style={{ display: 'flex', alignItems: 'center', gap: '1.5rem' }}>
+                  <div style={{
+                    width: '56px',
+                    height: '56px',
+                    borderRadius: '1rem',
+                    background: 'rgba(255,255,255,0.02)',
+                    border: `1px solid ${meta.accent}30`,
+                    display: 'flex',
+                    alignItems: 'center',
+                    justifyContent: 'center',
+                    color: meta.accent,
+                    boxShadow: `0 0 15px ${meta.accent}15`,
+                    flexShrink: 0
                   }}>
-                    {category.skills.map((skill, i) => (
-                      <span key={i} style={{ 
-                        fontSize: '0.65rem',
-                        color: 'rgba(255,255,255,0.6)', 
-                        background: 'rgba(255,255,255,0.03)',
-                        padding: '0.25rem 0.6rem',
-                        borderRadius: '2rem',
-                        border: '1px solid rgba(255,255,255,0.05)',
-                        fontWeight: 600,
-                        letterSpacing: '0.02em'
-                      }}>
-                        {skill}
-                      </span>
-                    ))}
+                    {meta.icon}
+                  </div>
+                  
+                  <div style={{ flex: 1 }}>
+                    <h3 style={{ fontSize: '1.15rem', fontWeight: 900, marginBottom: '0.5rem', letterSpacing: '-0.02em' }}>
+                      {meta.title}
+                    </h3>
+                    
+                    <div style={{ 
+                      display: 'flex', 
+                      flexWrap: 'wrap', 
+                      gap: '0.5rem'
+                    }}>
+                      {list.map((skill, i) => (
+                        <span key={i} style={{ 
+                          fontSize: '0.65rem',
+                          color: 'rgba(255,255,255,0.6)', 
+                          background: 'rgba(255,255,255,0.03)',
+                          padding: '0.25rem 0.6rem',
+                          borderRadius: '2rem',
+                          border: '1px solid rgba(255,255,255,0.05)',
+                          fontWeight: 600,
+                          letterSpacing: '0.02em'
+                        }}>
+                          {skill}
+                        </span>
+                      ))}
+                    </div>
                   </div>
                 </div>
-              </div>
-            </motion.div>
-          ))}
+              </motion.div>
+            );
+          })}
         </div>
         
         <style dangerouslySetInnerHTML={{ __html: `
