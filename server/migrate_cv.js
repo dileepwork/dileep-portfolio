@@ -1,18 +1,8 @@
-import sqlite3 from 'sqlite3';
-import path from 'path';
-import { fileURLToPath } from 'url';
+import { initDb, getDb } from './database.js';
 
-const __filename = fileURLToPath(import.meta.url);
-const __dirname = path.dirname(__filename);
-const dbPath = path.resolve(__dirname, '../database.sqlite');
-
-const db = new sqlite3.Database(dbPath, (err) => {
-  if (err) {
-    console.error('Error connecting to database:', err.message);
-    process.exit(1);
-  }
-  console.log('Connected to database for CV sync.');
-});
+await initDb();
+const db = getDb();
+console.log('Connected to Supabase PostgreSQL database for CV sync.');
 
 const profile = {
   name: "DILEEP V",
