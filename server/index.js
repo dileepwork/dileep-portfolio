@@ -33,10 +33,16 @@ const JWT_SECRET = process.env.JWT_SECRET || 'super_secret_cyber_security_key_fo
 app.use(cors());
 app.use(express.json());
 
-// Ensure Uploads Directory Exists
-const uploadsDir = path.join(__dirname, 'uploads');
-if (!fs.existsSync(uploadsDir)) {
-  fs.mkdirSync(uploadsDir, { recursive: true });
+// Ensure Uploads Directory Exists (Use /tmp for serverless Vercel environment)
+const isVercel = process.env.VERCEL || process.env.NODE_ENV === 'production';
+const uploadsDir = isVercel ? '/tmp' : path.join(__dirname, 'uploads');
+
+try {
+  if (!isVercel && !fs.existsSync(uploadsDir)) {
+    fs.mkdirSync(uploadsDir, { recursive: true });
+  }
+} catch (mkdirError) {
+  console.warn('Could not create uploads directory:', mkdirError.message);
 }
 
 // Serve Uploads Folder Statically
@@ -763,6 +769,13 @@ app.put('/api/settings/change-password', authenticateToken, (req, res) => {
       res.json({ success: true });
     });
   });
+});
+
+
+// Global Error Handler
+app.use((err, req, res, next) => {
+  console.error('Unhandled server error:', err);
+  res.status(500).json({ error: err.message || 'Internal Server Error' });
 });
 
 
