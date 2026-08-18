@@ -234,7 +234,7 @@ const PublicPortfolio = () => {
         <main style={{ position: 'relative', width: '100%' }}>
           
           <Scene id="hero">
-            <Hero profile={profile || { name: 'Dileep V', title: 'IoT Engineer', intro: '', profile_image: '/robot.png', resume_url: '' }} />
+            <Hero profile={profile || { name: 'Dileep V', title: 'IoT Engineer', intro: '', profile_image: '/dileep.png', resume_url: '' }} />
           </Scene>
 
           {projects && projects.length > 0 && (

@@ -297,18 +297,21 @@ const Hero: React.FC<HeroProps> = ({ profile }) => {
           </div>
 
           <motion.img 
-            src={profile.profile_image || "/robot.png"} 
-            alt="Robotic Assistant / Dileep"
+            src={profile.profile_image || "/dileep.png"} 
+            alt="Dileep V"
             animate={{ y: [10, -10, 10] }}
             transition={{ duration: 10, repeat: Infinity, ease: "easeInOut" }}
             style={{
               width: '90%',
               maxHeight: '85vh',
               objectFit: 'contain',
-              mixBlendMode: 'screen',
-              filter: 'brightness(1.2) contrast(1.5)',
-              WebkitMaskImage: 'radial-gradient(circle, black 60%, transparent 95%)',
-              maskImage: 'radial-gradient(circle, black 60%, transparent 95%)',
+              borderRadius: (profile.profile_image && profile.profile_image.includes('dileep')) ? '2rem' : '0',
+              border: (profile.profile_image && profile.profile_image.includes('dileep')) ? '2px solid rgba(16, 185, 129, 0.15)' : 'none',
+              boxShadow: (profile.profile_image && profile.profile_image.includes('dileep')) ? '0 0 30px rgba(16, 185, 129, 0.1)' : 'none',
+              mixBlendMode: (profile.profile_image && profile.profile_image.includes('dileep')) ? 'normal' : 'screen',
+              filter: (profile.profile_image && profile.profile_image.includes('dileep')) ? 'none' : 'brightness(1.2) contrast(1.5)',
+              WebkitMaskImage: (profile.profile_image && profile.profile_image.includes('dileep')) ? 'none' : 'radial-gradient(circle, black 60%, transparent 95%)',
+              maskImage: (profile.profile_image && profile.profile_image.includes('dileep')) ? 'none' : 'radial-gradient(circle, black 60%, transparent 95%)',
               pointerEvents: 'none',
               position: 'relative',
               zIndex: 2,
